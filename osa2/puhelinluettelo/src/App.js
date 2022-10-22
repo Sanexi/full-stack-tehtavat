@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from "./services/persons";
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -9,13 +9,8 @@ const App = () => {
   const [filteredList, setFilteredList] = useState([])
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
+    personService.getPersons()
+    .then(persons => {setPersons(persons)})
   }, [])
 
   const addName = (event) => {
@@ -27,6 +22,16 @@ const App = () => {
     }
     else {
       setPersons(persons.concat({name: newName, number: newNumber}))
+      personService.addPerson({name: newName, number: newNumber})
+    }
+  }
+
+  const deleteName = (person) => {
+    if (window.confirm("Delete", person.name, "?")) {
+      setPersons(persons.filter(person => {
+        return person !== {name: newName, number: newNumber}
+      }))
+      personService.deletePerson(person.id)
     }
   }
 
@@ -75,7 +80,7 @@ const App = () => {
         if (person === null) {
           return null
         }
-        return <p>{person.name} {person.number}</p>})}
+        return <div>{person.name} {person.number} <button value={person} onClick={deleteName}>delete</button></div>})}
     </div>
   )
 
