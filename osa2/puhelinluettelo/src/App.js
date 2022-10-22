@@ -1,12 +1,25 @@
 import { useState, useEffect } from 'react'
 import personService from "./services/persons";
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className="error">
+      {message}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
   const [filteredList, setFilteredList] = useState([])
+  const [eventMessage, setEventMessage] = useState('')
 
   useEffect(() => {
     personService.getPersons()
@@ -23,6 +36,10 @@ const App = () => {
     else {
       setPersons(persons.concat({name: newName, number: newNumber}))
       personService.addPerson({name: newName, number: newNumber})
+      setEventMessage(`Added ${newName}`)
+      setTimeout(() => {
+        setEventMessage(null)
+      }, 5000)
     }
   }
 
@@ -32,6 +49,10 @@ const App = () => {
         return person !== {name: newName, number: newNumber}
       }))
       personService.deletePerson(person.id)
+      setEventMessage(`Deleted ${person.name}`)
+      setTimeout(() => {
+        setEventMessage(null)
+      }, 5000)
     }
   }
 
@@ -64,6 +85,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={eventMessage} />
       <form>
         <div>filter shown with <input value={newFilter} onChange={handleFilterChange} /></div>
       </form>
