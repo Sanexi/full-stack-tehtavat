@@ -34,9 +34,16 @@ const App = () => {
       alert(`${newName} is already added to phonebook`)
     }
     else {
-      setPersons(persons.concat({name: newName, number: newNumber}))
-      personService.addPerson({name: newName, number: newNumber})
-      setEventMessage(`Added ${newName}`)
+      personService
+        .addPerson({name: newName, number: newNumber})
+        .then(createdPerson => {
+          setPersons(persons.concat({name: createdPerson.name, number: createdPerson.number}))
+          setEventMessage(`Added ${createdPerson.name}`)
+        })
+        .catch(error => {
+          setEventMessage(`${error.response.data.slice(104,180)}`)
+          console.log(error.response.data)
+        })
       setTimeout(() => {
         setEventMessage(null)
       }, 5000)
