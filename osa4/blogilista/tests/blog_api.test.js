@@ -71,13 +71,13 @@ test("there are two blogs", async () => {
   expect(response.body.length).toBe(2);
 });
 
-test("blogs have id-field called 'id' ", async () => {
+test("blogs have id-field", async () => {
     const response = await api.get("/api/blogs");
   
     expect(response.body[0].id).toBeDefined();
 });
   
-test("a valid blog can be added", async () => {
+test("a valid blog is added", async () => {
     const newBlog = {
         title: "Type wars",
         author: "Robert C. Martin",
@@ -98,7 +98,7 @@ test("a valid blog can be added", async () => {
     expect(title).toContain("Type wars");
 });
   
-test("a note can be deleted", async () => {
+test("a note is deleted", async () => {
     const blogsAtStart = await api.get("/api/blogs");
     length = blogsAtStart.body.length;
   
