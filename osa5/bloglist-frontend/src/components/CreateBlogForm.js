@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
 import blogService from '../services/blogs'
-import Notification from '../components/Notification'
+import Notification from './Notification'
 
-const NewBlogForm = () => {
+const CreateBlogForm = () => {
     const [blogname, setBlogname] = useState("")
     const [blogauthor, setBlogauthor] = useState("")
     const [blogurl, setBlogurl] = useState("")
@@ -51,4 +51,4 @@ const NewBlogForm = () => {
     )
 }
 
-export default NewBlogForm
+export default CreateBlogForm

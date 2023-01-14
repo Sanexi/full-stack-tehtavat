@@ -3,94 +3,94 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
-import newBlogForm from './components/NewBlogForm'
+import CreateBlogForm from './components/CreateBlogForm'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [errorMessage, setErrorMessage] = useState('')
-  const [user, setUser] = useState(null)
+  const [blogsData, setBlogsData] = useState([])
+  const [usernameData, setUsernameData] = useState('')
+  const [passwordData, setPasswordData] = useState('')
+  const [errorData, setErrorData] = useState('')
+  const [userData, setUserData] = useState(null)
   
   useEffect(() => {
-    setTheBlogs()
+    fetchBlogs()
   }, [])
   
   useEffect(() => {
     const logged = window.localStorage.getItem('logged')
     if (logged){
       const user = JSON.parse(logged)
-      setUser(user)
+      setUserData(user)
       blogService.setToken(user.token)
     } else {
-      setUser(null)
+      setUserData(null)
     }
   }, [])
 
-  const setTheBlogs = (async () => {
+  const fetchBlogs = (async () => {
     const blogs = await blogService.getAll()
-    setBlogs(blogs)
+    setBlogsData(blogs)
   })
 
-  const handleLogin = async (event) => {
+  const handleSignIn = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login({username, password})
+      const user = await loginService.login({usernameData, passwordData})
       window.localStorage.setItem(
         'logged', JSON.stringify(user) 
       )
       blogService.setToken(user.token)
-      setUser(user)
-      setUsername('')
-      setPassword('')
-      setErrorMessage(`User ${username} logged in`)
+      setUserData(user)
+      setUsernameData('')
+      setPasswordData('')
+      setErrorData(`User ${usernameData} logged in`)
       setTimeout(() => {
-        setErrorMessage('')
+        setErrorData('')
       }, 2000);
     } catch (exception){
-      setErrorMessage('Incorrect username or password')
+      setErrorData('Incorrect username or password')
       setTimeout(() => {
-        setErrorMessage('')
+        setErrorData('')
       }, 4000);
     }
   }
 
-  const logOutHandler = () => {
+  const handleSignOut = () => {
     window.localStorage.removeItem('logged')
     blogService.removeToken()
-    setErrorMessage(`User logged out`)
+    setErrorData(`User logged out`)
     setTimeout(() => {
-      setErrorMessage('')
+      setErrorData('')
     }, 2000);
   }
 
   const loginForm = () => (
-    <form onSubmit={handleLogin}>
+    <form onSubmit={handleSignIn}>
     <div>
       username 
-      <input type="text" value={username} name="Username" onChange={({target}) => setUsername(target.value)}/>
+      <input type="text" value={usernameData} name="Username" onChange={({target}) => setUsernameData(target.value)}/>
     </div>
     <div>
       password: 
-      <input type="password" value={password} name="Password" onChange={({target}) => setPassword(target.value)}/>
+      <input type="password" value={passwordData} name="Password" onChange={({target}) => setPasswordData(target.value)}/>
     </div>
     <button type="submit">login</button>
   </form>
   )
 
   const logOutForm = () => (
-    <form onSubmit={logOutHandler}>
+    <form onSubmit={handleSignOut}>
     <div>
-      <button type="submit">logout</button>
+    <button type="submit">logout</button>
     </div>
     </form>
   )
 
-  if (user === null){
+  if (userData === null){
     return (
       <div>
         <h2>blogs</h2>
-        <Notification message = {errorMessage}/>
+        <Notification message = {errorData}/>
         {loginForm()}
       </div>
     )
@@ -99,13 +99,13 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Notification message = {errorMessage}/>
+      <Notification message = {errorData}/>
       <div>
-        <p>{user.name} logged in </p>
+        <p>{userData.name} logged in </p>
         {logOutForm()}
-        {newBlogForm()}
+        {CreateBlogForm()}
       </div>
-      {blogs.map(blog =>
+      {blogsData.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
     </div>
