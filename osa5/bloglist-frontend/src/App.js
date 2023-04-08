@@ -106,7 +106,7 @@ const App = () => {
         {CreateBlogForm()}
       </div>
       {blogsData.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} getAllBlogs={blogsData} token={blogService.getToken()} />
       )}
     </div>
   )

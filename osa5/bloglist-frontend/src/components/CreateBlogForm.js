@@ -7,6 +7,7 @@ const CreateBlogForm = () => {
     const [blogauthor, setBlogauthor] = useState("")
     const [blogurl, setBlogurl] = useState("")
     const [message, setMessage] = useState('')
+    const [formVisible, setFormVisible] = useState(false)
 
     const newBlogHandler = async (event) => {
         event.preventDefault()
@@ -31,6 +32,13 @@ const CreateBlogForm = () => {
     }
 
     return (
+        <>
+        <button 
+         style={{display: formVisible ? 'none' : ''}}
+         onClick={() => setFormVisible(true)}
+        >
+            create a new blog
+        </button>
             <div>
                 <Notification message ={message}/>
             <form onSubmit={newBlogHandler}>
@@ -45,9 +53,11 @@ const CreateBlogForm = () => {
                 url: <input type="text" value={blogurl} name="BlogURL" onChange={({target}) => setBlogurl(target.value)}/>
                 </div>
                 <button type="submit">Create</button>
+                <button onClick={() => setFormVisible(false)}>cancel</button>
                 </div>
             </form>
             </div>
+        </>
     )
 }
 
