@@ -12,7 +12,7 @@ const Blog = ({blog, getAllBlogs, token}) => {
       likes: blog.likes+1,
       username: blog.user.username
     }
-    await blogService.like(blog._id, blogObj)
+    //await blogService.like(blog._id, blogObj)
     getAllBlogs()
   }
 
@@ -27,7 +27,7 @@ const Blog = ({blog, getAllBlogs, token}) => {
         <button onClick={() => setBlogVisible(!blogVisible)}>
           {blogVisible ? 'hide' : 'show'}
         </button>
-        <div style={{display: blogVisible ? '' : 'none'}}>
+        <div id='blogshown' style={{display: blogVisible ? '' : 'none'}}>
           <p>{blog.url}</p>
           {blog.likes}
           <button onClick={updateLikes}>like</button>
