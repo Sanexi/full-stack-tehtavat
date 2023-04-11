@@ -5,6 +5,7 @@ const cors = require('cors')
 const blogsRouter = require('./controllers/blogs')
 const userRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
+const resetRouter = require('./controllers/reset')
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 const mongoose = require('mongoose')
@@ -26,5 +27,9 @@ app.use(express.json())
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
+
+if(process.env.NODE_ENV === 'test') {
+  app.use('/api/testing/reset', resetRouter)
+}
 
 module.exports = app
